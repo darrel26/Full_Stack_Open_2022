@@ -1,29 +1,14 @@
 {
   "persons": [
     {
-      "name": "Arto Hellas",
-      "number": "040-123456",
-      "id": 1
-    },
-    {
-      "name": "Ada Lovelace",
-      "number": "39-44-5323523",
-      "id": 2
-    },
-    {
       "name": "Dan Abramov",
-      "number": "12-43-234345",
+      "number": "12312412412",
       "id": 3
     },
     {
       "name": "Mary Poppendieck",
-      "number": "39-23-6423122",
+      "number": "12r12512512",
       "id": 4
-    },
-    {
-      "name": "Dionisius Darrel",
-      "number": "69-48-8946123",
-      "id": 5
     }
   ]
 }

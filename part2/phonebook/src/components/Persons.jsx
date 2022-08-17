@@ -1,6 +1,6 @@
 import React from "react";
 
-const Persons = ({ person, query }) => {
+const Persons = ({ person, query, onDelete }) => {
   const phoneBook = [...person];
 
   const filteredPhoneBook = phoneBook.filter((person) => {
@@ -10,8 +10,9 @@ const Persons = ({ person, query }) => {
     <div>
       {filteredPhoneBook.map((person) => {
         return (
-          <div key={person.id}>
+          <div key={person.id} id={person.id}>
             {person.name} {person.number}
+            <button onClick={onDelete} value={person.name}>delete</button>
           </div>
         );
       })}
