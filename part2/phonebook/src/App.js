@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Filter from './components/Filter';
 import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
+import Notification from './components/Notification';
 import { getAll, create, deletePerson, update } from './services';
 
 const App = () => {
@@ -15,6 +16,7 @@ const App = () => {
   const [filterQuery, setFilterQuery] = useState('');
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
+  const [message, setMessage] = useState([]);
 
   const handleFilterChange = (e) => {
     setFilterQuery(e.target.value);
@@ -34,7 +36,7 @@ const App = () => {
     const newPerson = {
       name: newName,
       number: newNumber,
-      id: Math.floor(Math.random() * 1000),
+      id: +new Date().getTime(),
     };
 
     const availability = persons.find(
@@ -44,27 +46,42 @@ const App = () => {
     const changedPerson = { ...availability, number: newNumber };
 
     availability === undefined
-      ? create(newPerson).then((data) => setPersons([...persons, data]))
+      ? create(newPerson).then((data) => {
+          setPersons([...persons, data]);
+          setMessage([`Added ${newPerson.name}`, 'success']);
+        })
       : window.confirm(
           `${availability.name} is already added to your phonebook, replace with a new one ?`
         )
       ? update(availability.id, changedPerson)
           .then((res) => res.data)
+          .then(() =>
+            setMessage([`Change ${newPerson.name} number`, 'success'])
+          )
           .then(() => getAll().then((data) => setPersons(data)))
       : '';
   };
 
   const handleDeletePerson = (e) => {
+    setMessage([
+      `Information of ${e.target.value} has already been removed from server`,
+      'warning',
+    ]);
     window.confirm(`Delete ${e.target.value} ?`)
       ? deletePerson(e.target.parentElement.id).then(() =>
           getAll().then((data) => setPersons(data))
         )
-      : '';
+      : setMessage([]);
   };
 
   return (
     <div>
       <h2>Phonebook</h2>
+      {message.length !== 0 ? (
+        <Notification message={message[0]} status={message[1]} />
+      ) : (
+        ''
+      )}
       <Filter
         filterQuery={filterQuery}
         handleFilterChange={handleFilterChange}
