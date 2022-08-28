@@ -9,7 +9,7 @@ DELETE http://localhost:3001/api/persons/4
 POST http://localhost:3001/api/persons
 Content-Type: application/json
 
-{
-    "name": "Testing POST METHOD",
+{   
+    "name": "Testing POST METHOD 2",
     "number": "08512712571"
 }
