@@ -56,10 +56,14 @@ const App = () => {
         })
           .then((result) => {
             if (result.isConfirmed) {
-              create(newPerson).then((data) => {
-                setPersons([...persons, data]);
-                Swal.fire(`Added ${newPerson.name}`, '', 'success');
-              });
+              create(newPerson)
+                .then((data) => {
+                  setPersons([...persons, data]);
+                  Swal.fire(`Added ${newPerson.name}`, '', 'success');
+                })
+                .catch((error) => {
+                  Swal.fire(`${error.response.data.error}`, '', 'error');
+                });
             } else {
               Swal.fire(' Cancelled', '', 'error');
             }
