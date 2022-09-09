@@ -36,7 +36,6 @@ const App = () => {
     const newPerson = {
       name: newName,
       number: newNumber,
-      id: +new Date().getTime(),
     };
 
     const availability = persons.find(
@@ -46,10 +45,12 @@ const App = () => {
     const changedPerson = { ...availability, number: newNumber };
 
     availability === undefined
-      ? create(newPerson).then((data) => {
-          setPersons([...persons, data]);
-          setMessage([`Added ${newPerson.name}`, 'success']);
-        })
+      ? create(newPerson)
+          .then((data) => {
+            setPersons([...persons, data]);
+            setMessage([`Added ${newPerson.name}`, 'success']);
+          })
+          .catch((error) => setMessage([error.response.data.error, 'warning']))
       : window.confirm(
           `${availability.name} is already added to your phonebook, replace with a new one ?`
         )
@@ -59,6 +60,7 @@ const App = () => {
             setMessage([`Change ${newPerson.name} number`, 'success'])
           )
           .then(() => getAll().then((data) => setPersons(data)))
+          .catch((error) => setMessage([error.response.data.error, 'warning']))
       : '';
   };
 
