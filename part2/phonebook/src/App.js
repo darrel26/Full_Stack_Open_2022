@@ -5,6 +5,7 @@ import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
 import Notification from './components/Notification';
 import { getAll, create, deletePerson, update } from './services';
+import './index.css';
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -70,38 +71,42 @@ const App = () => {
       'warning',
     ]);
     window.confirm(`Delete ${e.target.value} ?`)
-      ? deletePerson(e.target.parentElement.id).then(() =>
+      ? deletePerson(e.target.id).then(() =>
           getAll().then((data) => setPersons(data))
         )
       : setMessage([]);
   };
 
   return (
-    <div>
-      <h2>Phonebook</h2>
-      {message.length !== 0 ? (
-        <Notification message={message[0]} status={message[1]} />
-      ) : (
-        ''
-      )}
-      <Filter
-        filterQuery={filterQuery}
-        handleFilterChange={handleFilterChange}
-      />
-      <h2>Add a new</h2>
-      <PersonForm
-        handleFormSubmit={handleFormSubmit}
-        newName={newName}
-        handleNameChange={handleNameChange}
-        newNumber={newNumber}
-        handleNumberChange={handleNumberChange}
-      />
-      <h3>Numbers</h3>
-      <Persons
-        person={persons}
-        query={filterQuery}
-        onDelete={handleDeletePerson}
-      />
+    <div className="flex sm:flex-col md:flex-row lg:flex-row">
+      <div className="rounded-xl basis-2/4 flex flex-col justify-center m-10 bg-white bg-opacity-30 p-10 content-center h-max">
+        <div className="flex justify-between pb-9 ">
+          <h2 className="font-bold lg:text-4xl md:text-xl">Phonebook</h2>
+          {message.length !== 0 ? (
+            <Notification message={message[0]} status={message[1]} />
+          ) : (
+            ''
+          )}
+          <Filter
+            filterQuery={filterQuery}
+            handleFilterChange={handleFilterChange}
+          />
+        </div>
+        <PersonForm
+          handleFormSubmit={handleFormSubmit}
+          newName={newName}
+          handleNameChange={handleNameChange}
+          newNumber={newNumber}
+          handleNumberChange={handleNumberChange}
+        />
+      </div>
+      <div className="flex basis-2/4 justify-center p-5 lg:px-5 xl:px-0">
+        <Persons
+          person={persons}
+          query={filterQuery}
+          onDelete={handleDeletePerson}
+        />
+      </div>
     </div>
   );
 };
