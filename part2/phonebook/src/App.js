@@ -5,6 +5,7 @@ import PersonForm from './components/PersonForm';
 import Persons from './components/Persons';
 import Notification from './components/Notification';
 import { getAll, create, deletePerson, update } from './services';
+import Swal from 'sweetalert2';
 import './index.css';
 
 const App = () => {
@@ -17,7 +18,6 @@ const App = () => {
   const [filterQuery, setFilterQuery] = useState('');
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
-  const [message, setMessage] = useState([]);
 
   const handleFilterChange = (e) => {
     setFilterQuery(e.target.value);
@@ -46,35 +46,73 @@ const App = () => {
     const changedPerson = { ...availability, number: newNumber };
 
     availability === undefined
-      ? create(newPerson)
-          .then((data) => {
-            setPersons([...persons, data]);
-            setMessage([`Added ${newPerson.name}`, 'success']);
+      ? Swal.fire({
+          title: 'Are you sure?',
+          icon: 'question',
+          showConfirmButton: true,
+          showCancelButton: true,
+          confirmButtonText: 'Yes',
+          cancelButtonText: 'Cancel',
+        })
+          .then((result) => {
+            if (result.isConfirmed) {
+              create(newPerson).then((data) => {
+                setPersons([...persons, data]);
+                Swal.fire(`Added ${newPerson.name}`, '', 'success');
+              });
+            } else {
+              Swal.fire(' Cancelled', '', 'error');
+            }
           })
-          .catch((error) => setMessage([error.response.data.error, 'warning']))
-      : window.confirm(
-          `${availability.name} is already added to your phonebook, replace with a new one ?`
-        )
-      ? update(availability.id, changedPerson)
-          .then((res) => res.data)
-          .then(() =>
-            setMessage([`Change ${newPerson.name} number`, 'success'])
+          .catch((error) =>
+            Swal.fire(`${error.response.data.error}`, '', 'error')
           )
-          .then(() => getAll().then((data) => setPersons(data)))
-          .catch((error) => setMessage([error.response.data.error, 'warning']))
-      : '';
+      : Swal.fire({
+          title: `${availability.name} is already added to your phonebook, replace with a new one ?`,
+          icon: 'warning',
+          showConfirmButton: true,
+          showCancelButton: true,
+          confirmButtonText: 'Yes',
+          cancelButtonText: 'Cancel',
+        })
+          .then((result) => {
+            if (result.isConfirmed) {
+              update(availability.id, changedPerson)
+                .then((res) => res.data)
+                .then(() => {
+                  Swal.fire(
+                    `Success change ${availability.name} contact number`,
+                    '',
+                    'success'
+                  );
+                })
+                .then(() => getAll().then((data) => setPersons(data)));
+            } else {
+              Swal.fire(' Cancelled', '', 'error');
+            }
+          })
+          .catch((error) =>
+            Swal.fire(`${error.response.data.error}`, '', 'error')
+          );
   };
-
   const handleDeletePerson = (e) => {
-    setMessage([
-      `Information of ${e.target.value} has already been removed from server`,
-      'warning',
-    ]);
-    window.confirm(`Delete ${e.target.value} ?`)
-      ? deletePerson(e.target.id).then(() =>
-          getAll().then((data) => setPersons(data))
-        )
-      : setMessage([]);
+    Swal.fire({
+      title: `Are you sure you want to delete ${e.target.value} ?`,
+      icon: 'warning',
+      showConfirmButton: true,
+      showCancelButton: true,
+      confirmButtonText: 'Delete',
+      cancelButtonText: 'Cancel',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deletePerson(e.target.id).then(() => {
+          getAll().then((data) => setPersons(data));
+        });
+        Swal.fire(`${e.target.value} Deleted`, '', 'success');
+      } else {
+        Swal.fire(' Cancelled', '', 'error');
+      }
+    });
   };
 
   return (
@@ -82,11 +120,6 @@ const App = () => {
       <div className="rounded-xl basis-2/4 flex flex-col justify-center m-10 bg-white bg-opacity-30 p-10 content-center h-max">
         <div className="flex justify-between pb-9 ">
           <h2 className="font-bold lg:text-4xl md:text-xl">Phonebook</h2>
-          {message.length !== 0 ? (
-            <Notification message={message[0]} status={message[1]} />
-          ) : (
-            ''
-          )}
           <Filter
             filterQuery={filterQuery}
             handleFilterChange={handleFilterChange}
