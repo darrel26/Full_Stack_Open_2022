@@ -1,34 +1,35 @@
 const router = require('express').Router();
 const Persons = require('../models/contact');
 
-router.get('/', (request, response) => {
-  Persons.find({}).then((person) => {
-    response.json(person);
-  });
+router.get('/', async (request, response) => {
+  const persons = await Persons.find({});
+  response.json(persons);
 });
 
-router.get('/:id', (request, response, next) => {
-  Persons.findById(request.params.id)
-    .then((person) => {
-      if (person) {
-        response.json(person);
-      } else {
-        response.status(404).end();
-      }
-    })
-    .catch((error) => next(error));
+router.get('/:id', async (request, response, next) => {
+  try {
+    const persons = await Persons.findById(request.params.id);
+    if (persons) {
+      response.json(persons);
+    } else {
+      response.status(404).end();
+    }
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.get('/info', async (request, response) => {
-  const phoneBookLength = await Persons.find({}).then(
-    (person) => person.length
-  );
-  const body = `<p>Phonebook has info for ${phoneBookLength} people</p><p>${new Date()}</p>`;
+router.get('/v1/info', async (request, response) => {
+  const contacts = await Persons.find({});
+
+  const body = `<p>Phonebook has info for ${
+    contacts.length
+  } people</p><p>${new Date()}</p>`;
 
   response.send(body);
 });
 
-router.post('/', (request, response, next) => {
+router.post('/', async (request, response, next) => {
   const body = request.body;
 
   if (body === undefined) {
@@ -50,12 +51,12 @@ router.post('/', (request, response, next) => {
     number: body.number,
   });
 
-  person
-    .save()
-    .then((savedPerson) => {
-      response.json(savedPerson);
-    })
-    .catch((error) => next(error));
+  try {
+    const savedPerson = await person.save();
+    response.status(201).json(savedPerson);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.put('/:id', (request, response, next) => {
