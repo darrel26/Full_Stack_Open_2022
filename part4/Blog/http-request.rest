@@ -9,3 +9,15 @@ Content-Type: application/json
     "url": "http://localhost/3001",
     "likes": 2001
 }
+###
+DELETE http://localhost:3001/api/v1/blog-list/631f6f43ee70ea0d35859841
+###
+PUT http://localhost:3001/api/v1/blog-list/6322cd8d42ade18b54782a3b
+Content-Type: application/json
+
+{
+    "title": "Family Feud - Grizzly Bear ?",
+    "author": "better-admin",
+    "url": "http://localhost/3001",
+    "likes": 37
+}

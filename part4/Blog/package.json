@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js",
-    "test": "jest --verbose",
-    "test:describe": "jest --config=jest.config.json --watch"
+    "start": "cross-env set NODE_ENV=production && node index.js",
+    "dev": "cross-env set NODE_ENV=development && nodemon index.js",
+    "test": "cross-env set NODE_ENV=test && jest --verbose --runInBand --forceExit"
   },
   "dependencies": {
     "cors": "^2.8.5",

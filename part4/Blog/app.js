@@ -20,7 +20,7 @@ app.use(cors());
 app.use(express.json());
 app.use(middleware.requestLogger);
 
-app.use('/api/v1/', blogRouter);
+app.use('/api/v1/blog-list', blogRouter);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
