@@ -7,15 +7,11 @@ router.get('/', async (request, response) => {
 });
 
 router.get('/:id', async (request, response, next) => {
-  try {
-    const persons = await Persons.findById(request.params.id);
-    if (persons) {
-      response.json(persons);
-    } else {
-      response.status(404).end();
-    }
-  } catch (error) {
-    next(error);
+  const persons = await Persons.findById(request.params.id);
+  if (persons) {
+    response.json(persons);
+  } else {
+    response.status(404).end();
   }
 });
 
@@ -51,12 +47,8 @@ router.post('/', async (request, response, next) => {
     number: body.number,
   });
 
-  try {
-    const savedPerson = await person.save();
-    response.status(201).json(savedPerson);
-  } catch (error) {
-    next(error);
-  }
+  const savedPerson = await person.save();
+  response.status(201).json(savedPerson);
 });
 
 router.put('/:id', (request, response, next) => {
@@ -75,10 +67,9 @@ router.put('/:id', (request, response, next) => {
     .catch((error) => next(error));
 });
 
-router.delete('/:id', (request, response, next) => {
-  return Persons.findByIdAndRemove(request.params.id)
-    .then(() => response.status(204).end())
-    .catch((error) => next(error));
+router.delete('/:id', async (request, response, next) => {
+  await Persons.findByIdAndRemove(request.params.id);
+  response.status(204).end();
 });
 
 module.exports = router;
