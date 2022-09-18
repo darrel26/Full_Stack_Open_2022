@@ -8,12 +8,13 @@ const api = supertest(app);
 
 beforeEach(async () => {
   await Persons.deleteMany({});
+  console.log('all items are deleted!');
 
-  let personObject = new Persons(helper.initialContact[0]);
-  await personObject.save();
-
-  personObject = new Persons(helper.initialContact[1]);
-  await personObject.save();
+  const personObject = helper.initialContact.map(
+    (person) => new Persons(person)
+  );
+  const promiseArray = personObject.map((person) => person.save());
+  await Promise.all(promiseArray);
 });
 
 test('notes are returned as json', async () => {
@@ -82,7 +83,7 @@ test('a specific persons can be viewed', async () => {
   expect(result.body).toEqual(processedPersonToView);
 });
 
-test('a person in contacts can be deleted', async () => {
+test.only('a person in contacts can be deleted', async () => {
   const personsAtStart = await helper.personsInDatabase();
   const personToDelete = personsAtStart[0];
 
