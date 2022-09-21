@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const Blog = require('../models/blog');
+const User = require('../models/user');
 
 const blogs = [
   {
@@ -83,6 +84,11 @@ const blogInDatabase = async () => {
   return blogList.map((blog) => blog.toJSON());
 };
 
+const userInDatabase = async () => {
+  const userList = await User.find({});
+  return userList.map((user) => user.toJSON());
+};
+
 module.exports = {
   blogs,
   authorGroup,
@@ -90,4 +96,5 @@ module.exports = {
   likesGroup,
   favoriteBlog,
   blogInDatabase,
+  userInDatabase,
 };

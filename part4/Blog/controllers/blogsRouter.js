@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const Blog = require('../models/blog');
+const User = require('../models/user');
 
 router.get('/', async (req, res) => {
   const blogs = await Blog.find({});
@@ -16,7 +17,9 @@ router.get('/:id', async (req, res, next) => {
 });
 
 router.post('/', async (req, res) => {
-  const blog = new Blog(req.body);
+  const { title, author, url, likes, userId } = req.body;
+
+  const user = await User.findById(userId);
 
   if (req.body === undefined) {
     return res.status(400).json({ error: 'Content missing!' });
@@ -32,7 +35,18 @@ router.post('/', async (req, res) => {
     });
   }
 
+  const blog = new Blog({
+    title,
+    author,
+    url,
+    likes,
+    userId: user._id,
+  });
+
   const savedBlog = await blog.save();
+  user.blogs = user.blogs.concat(savedBlog._id);
+  await user.save();
+
   res.status(201).json(savedBlog);
 });
 

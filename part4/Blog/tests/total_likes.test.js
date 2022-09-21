@@ -1,5 +1,5 @@
-const listHelper = require('../utils/list_helper').totalLikes;
-const blogs = require('../utils/list_helper').blogs;
+const listHelper = require('../utils/test_helper').totalLikes;
+const blogs = require('../utils/test_helper').blogs;
 
 describe('total likes', () => {
   test('of empty list is zero', () => {
