@@ -1,3 +1,4 @@
+const jwt = require('jsonwebtoken');
 const router = require('express').Router();
 const Blog = require('../models/blog');
 const User = require('../models/user');
@@ -16,10 +17,23 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res) => {
-  const { title, author, url, likes, user } = req.body;
+const getTokenFrom = (request) => {
+  const authorization = request.get('authorization');
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    return authorization.substring(7);
+  }
+  return null;
+};
 
-  const users = await User.findById(user);
+router.post('/', async (req, res) => {
+  const { title, author, url, likes } = req.body;
+
+  const token = getTokenFrom(req);
+  const decodedToken = jwt.verify(token, process.env.SECRET);
+  if (!decodedToken.id) {
+    return res.status(401).json({ error: 'token missing or invalid' });
+  }
+  const users = await User.findById(decodedToken.id);
 
   if (req.body === undefined) {
     return res.status(400).json({ error: 'Content missing!' });
