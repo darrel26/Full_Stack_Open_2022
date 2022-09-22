@@ -8,7 +8,7 @@ Content-Type: application/json
     "author": "Darrel",
     "url": "http://localhost/3001",
     "likes": 101,
-    "userId": "632b48f82be7cec0a8e5660e"
+    "user": "632bf7248eeb42984a1b6650"
 }
 ###
 DELETE http://localhost:3001/api/v1/blog-list/632b59663a0dd29be1d04cda

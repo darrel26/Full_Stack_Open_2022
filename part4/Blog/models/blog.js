@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const mongoose = require('mongoose');
 
 const blogSchema = new mongoose.Schema({
@@ -19,9 +17,9 @@ const blogSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  userId: {
+  user: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'users',
+    ref: 'User',
   },
 });
 

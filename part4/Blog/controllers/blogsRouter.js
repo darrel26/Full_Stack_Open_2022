@@ -3,7 +3,7 @@ const Blog = require('../models/blog');
 const User = require('../models/user');
 
 router.get('/', async (req, res) => {
-  const blogs = await Blog.find({});
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 });
   res.json(blogs);
 });
 
@@ -17,9 +17,9 @@ router.get('/:id', async (req, res, next) => {
 });
 
 router.post('/', async (req, res) => {
-  const { title, author, url, likes, userId } = req.body;
+  const { title, author, url, likes, user } = req.body;
 
-  const user = await User.findById(userId);
+  const users = await User.findById(user);
 
   if (req.body === undefined) {
     return res.status(400).json({ error: 'Content missing!' });
@@ -40,12 +40,12 @@ router.post('/', async (req, res) => {
     author,
     url,
     likes,
-    userId: user._id,
+    user: users._id,
   });
 
   const savedBlog = await blog.save();
-  user.blogs = user.blogs.concat(savedBlog._id);
-  await user.save();
+  users.blogs = users.blogs.concat(savedBlog._id);
+  await users.save();
 
   res.status(201).json(savedBlog);
 });
