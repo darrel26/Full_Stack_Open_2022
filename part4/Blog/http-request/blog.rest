@@ -1,0 +1,24 @@
+GET http://localhost:3001/api/v1/blog-list
+###
+POST http://localhost:3001/api/v1/blog-list
+Content-Type: application/json
+
+{
+    "title": "Louis Vuitton vs Gucci Bag",
+    "author": "Darrel",
+    "url": "http://localhost/3001",
+    "likes": 101,
+    "user": "632bf7248eeb42984a1b6650"
+}
+###
+DELETE http://localhost:3001/api/v1/blog-list/632b59663a0dd29be1d04cda
+###
+PUT http://localhost:3001/api/v1/blog-list/6322cd8d42ade18b54782a3b
+Content-Type: application/json
+
+{
+    "title": "Family Feud - Grizzly Bear ?",
+    "author": "better-admin",
+    "url": "http://localhost/3001",
+    "likes": 37
+}
