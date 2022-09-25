@@ -6,6 +6,7 @@ const config = require('./utils/config');
 const logger = require('./utils/logger');
 const blogsRouter = require('./controllers/blogsRouter');
 const usersRouter = require('./controllers/usersRouter');
+const loginRouter = require('./controllers/loginRouter');
 const middleware = require('./utils/middleware');
 
 mongoose
@@ -20,9 +21,11 @@ mongoose
 app.use(cors());
 app.use(express.json());
 app.use(middleware.requestLogger);
+app.use(middleware.tokenExtractor);
 
 app.use('/api/v1/blog-list', blogsRouter);
 app.use('/api/users', usersRouter);
+app.use('/api/login', loginRouter);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);

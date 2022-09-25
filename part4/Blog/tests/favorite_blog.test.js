@@ -1,5 +1,5 @@
 const listHelper = require('../utils/test_helper');
-const blogs = require('../utils/list_helper').blogs;
+const blogs = require('../utils/test_helper').blogs;
 
 describe('favorite blog', () => {
   test('with most likes', () => {
@@ -15,8 +15,8 @@ describe('favorite blog', () => {
 
   test('author with most blogs', () => {
     const expected = {
-      author: 'Robert C. Martin',
-      blogs: 3,
+      author: 'Edsger W. Dijkstra',
+      blogs: 2,
     };
     const result = listHelper.authorGroup(blogs);
 

@@ -28,6 +28,6 @@ describe('total likes', () => {
   test('of a bigger list is calculated right', () => {
     const result = listHelper(blogs);
 
-    expect(result).toBe(36);
+    expect(result).toBe(34);
   });
 });

@@ -1,6 +1,8 @@
+const jwt = require('jsonwebtoken');
 const router = require('express').Router();
 const Blog = require('../models/blog');
 const User = require('../models/user');
+const { userExtractor } = require('../utils/middleware');
 
 router.get('/', async (req, res) => {
   const blogs = await Blog.find({}).populate('user', { username: 1, name: 1 });
@@ -16,10 +18,9 @@ router.get('/:id', async (req, res, next) => {
   }
 });
 
-router.post('/', async (req, res) => {
-  const { title, author, url, likes, user } = req.body;
-
-  const users = await User.findById(user);
+router.post('/', userExtractor, async (req, res) => {
+  const { title, author, url, likes } = req.body;
+  const user = await req.user;
 
   if (req.body === undefined) {
     return res.status(400).json({ error: 'Content missing!' });
@@ -40,18 +41,27 @@ router.post('/', async (req, res) => {
     author,
     url,
     likes,
-    user: users._id,
+    user: user._id,
   });
 
   const savedBlog = await blog.save();
-  users.blogs = users.blogs.concat(savedBlog._id);
-  await users.save();
+  user.blogs = user.blogs.concat(savedBlog._id);
+  await user.save();
 
   res.status(201).json(savedBlog);
 });
 
-router.delete('/:id', async (req, res) => {
-  await Blog.findByIdAndRemove(req.params.id);
+router.delete('/:id', userExtractor, async (req, res) => {
+  const user = await req.user;
+  const blogToView = await Blog.findById(req.params.id);
+
+  if (!blogToView) {
+    return res.status(404).json({ error: 'blog id not found' });
+  } else if (blogToView.user.toString() !== user.id.toString()) {
+    return res.status(401).json({ error: 'unmatched blog and user' });
+  }
+
+  await blogToView.remove();
   res.status(204).end();
 });
 
