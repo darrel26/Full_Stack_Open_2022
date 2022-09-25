@@ -33,11 +33,25 @@ const blogs = [
     url: 'http://blog.cleancoder.com/uncle-bob/2017/03/03/TDD-Harms-Architecture.html',
     likes: 0,
   },
+];
+
+const newBlog = [
   {
-    title: 'Type wars',
-    author: 'Robert C. Martin',
-    url: 'http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html',
-    likes: 2,
+    title: 'A review of the IBM 1620 Data Processing System',
+    author: 'Edsger W. Dijkstra',
+    url: 'https://www.cs.utexas.edu/~EWD/transcriptions/EWD00xx/EWD37.html',
+  },
+];
+
+const initialUser = [
+  {
+    username: 'darrelgunadi',
+    name: 'Dionisius Darrel',
+    password: 'diondarrel',
+  },
+  {
+    username: 'root',
+    password: 'admin',
   },
 ];
 
@@ -91,6 +105,8 @@ const userInDatabase = async () => {
 
 module.exports = {
   blogs,
+  newBlog,
+  initialUser,
   authorGroup,
   totalLikes,
   likesGroup,

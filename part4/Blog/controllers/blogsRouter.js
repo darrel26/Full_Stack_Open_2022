@@ -20,11 +20,6 @@ router.get('/:id', async (req, res, next) => {
 
 router.post('/', userExtractor, async (req, res) => {
   const { title, author, url, likes } = req.body;
-
-  const decodedToken = jwt.verify(req.token, process.env.SECRET);
-  if (!decodedToken.id) {
-    return res.status(401).json({ error: 'token missing or invalid' });
-  }
   const user = await req.user;
 
   if (req.body === undefined) {
@@ -58,7 +53,6 @@ router.post('/', userExtractor, async (req, res) => {
 
 router.delete('/:id', userExtractor, async (req, res) => {
   const user = await req.user;
-
   const blogToView = await Blog.findById(req.params.id);
 
   if (!blogToView) {
@@ -68,6 +62,7 @@ router.delete('/:id', userExtractor, async (req, res) => {
   }
 
   await blogToView.remove();
+  res.status(204).end();
 });
 
 router.put('/:id', async (req, res) => {

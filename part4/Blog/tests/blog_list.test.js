@@ -22,69 +22,6 @@ describe('When there is initially some blog saved', () => {
   });
 });
 
-describe('When add a new blog', () => {
-  test('a new valid blog can be added', async () => {
-    const newBlog = {
-      title: 'A review of the IBM 1620 Data Processing System',
-      author: 'Edsger W. Dijkstra',
-      url: 'https://www.cs.utexas.edu/~EWD/transcriptions/EWD00xx/EWD37.html',
-      likes: 37,
-    };
-
-    await api
-      .post('/api/v1/blog-list')
-      .send(newBlog)
-      .expect(201)
-      .expect('Content-Type', /application\/json/);
-
-    const blogAtEnd = await helper.blogInDatabase();
-    expect(blogAtEnd).toHaveLength(helper.blogs.length + 1);
-
-    const blogs = blogAtEnd.map((blog) => blog.author);
-    expect(blogs).toContainEqual('Edsger W. Dijkstra');
-  });
-
-  test('if there is no likes properties, default value will be set to 0', async () => {
-    const newBlog = {
-      title: 'A review of the IBM 1620 Data Processing System',
-      author: 'Edsger W. Dijkstra',
-      url: 'https://www.cs.utexas.edu/~EWD/transcriptions/EWD00xx/EWD37.html',
-    };
-
-    await api
-      .post('/api/v1/blog-list')
-      .send(newBlog)
-      .expect(201)
-      .expect('Content-Type', /application\/json/);
-
-    const blogAtEnd = await helper.blogInDatabase();
-    expect(blogAtEnd).toHaveLength(helper.blogs.length + 1);
-
-    expect(blogAtEnd[helper.blogs.length].likes).toBe(0);
-  });
-
-  test('get response code 400, if the title and url properties are missing from the request data', async () => {
-    const newBlog = {
-      title: 'A review of the IBM 1620 Data Processing System',
-      likes: 10,
-    };
-
-    await api.post('/api/v1/blog-list').send(newBlog).expect(400);
-  });
-});
-
-describe('When delete a blog', () => {
-  test('succeeds with status code 204 if id is valid', async () => {
-    const blogAtStart = await helper.blogInDatabase();
-    const blogToDelete = blogAtStart[0];
-
-    await api.delete(`/api/v1/blog-list/${blogToDelete.id}`).expect(204);
-
-    const blogAtEnd = await helper.blogInDatabase();
-    expect(blogAtEnd).toHaveLength(helper.blogs.length - 1);
-  });
-});
-
 describe('When update a blog', () => {
   test('success update an existing blog', async () => {
     const updateBlog = {
