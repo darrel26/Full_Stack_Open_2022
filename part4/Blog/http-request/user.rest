@@ -2,9 +2,9 @@ POST http://localhost:3001/api/users
 Content-Type: application/json
 
 {
-    "username": "2lipa",
-    "name": "Dua Lipa",
-    "password": "lipadua"
+    "username": "admin",
+    "name": "test",
+    "password": "root"
 }
 ###
-GET http://localhost:3001/api/users
+GET http://localhost:3001/api/users/63c17f15025f8c172f2dd94c

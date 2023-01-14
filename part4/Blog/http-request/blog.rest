@@ -2,18 +2,18 @@ GET http://localhost:3001/api/v1/blog-list
 ###
 POST http://localhost:3001/api/v1/blog-list
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjJsaXBhIiwiaWQiOiI2MzJiZjcyNDhlZWI0Mjk4NGExYjY2NTAiLCJpYXQiOjE2NjQwMDYxMzQsImV4cCI6MTY2NDAwOTczNH0.1itrIkWKXM2IQFNqq1vqxiRs73Q_rEB_WYT5r2uOh_s
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6IjYzYzE3ZjE1MDI1ZjhjMTcyZjJkZDk0YyIsImlhdCI6MTY3MzcwNjIwNiwiZXhwIjoxNjczNzA5ODA2fQ.NzBJg1N17Y9_ZHvos3Uc0wIuCkRSbf8t4M5kVBNOWz4
 
 {
-    "title": "Louis Vuitton vs Gucci Bag",
+    "title": "Test Blog - V1",
     "author": "Darrel",
     "url": "http://localhost/3001",
     "likes": 101,
     "user": "632bf7248eeb42984a1b6650"
 }
 ###
-DELETE http://localhost:3001/api/v1/blog-list/632ec010e93376680e16668c
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IjJsaXBhIiwiaWQiOiI2MzJiZjcyNDhlZWI0Mjk4NGExYjY2NTAiLCJpYXQiOjE2NjQwMDYxMzQsImV4cCI6MTY2NDAwOTczNH0.1itrIkWKXM2IQFNqq1vqxiRs73Q_rEB_WYT5r2uOh_s
+DELETE http://localhost:3001/api/v1/blog-list/63c25395dd384eecdb23f1be
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3QiLCJpZCI6IjYzYzE3ZjE1MDI1ZjhjMTcyZjJkZDk0YyIsImlhdCI6MTY3MzcwNjIwNiwiZXhwIjoxNjczNzA5ODA2fQ.NzBJg1N17Y9_ZHvos3Uc0wIuCkRSbf8t4M5kVBNOWz4
 ###
 PUT http://localhost:3001/api/v1/blog-list/6322cd8d42ade18b54782a3b
 Content-Type: application/json
