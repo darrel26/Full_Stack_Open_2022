@@ -22,6 +22,12 @@ router.post('/', userExtractor, async (req, res) => {
   const { title, author, url, likes } = req.body;
   const user = await req.user;
 
+  const isBlogNew = await Blog.findOne({title: title});
+
+  if(isBlogNew !== null) {
+    return res.status(409).json({error: 'Blog with the same title found!'})
+  }
+
   if (req.body === undefined) {
     return res.status(400).json({ error: 'Content missing!' });
   }
